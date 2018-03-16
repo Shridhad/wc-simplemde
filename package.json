@@ -4,5 +4,9 @@
   "description": "Web Component wrapper over simple mde ",
   "main": "index.js",
   "author": "Shridhar Deshmukh",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0"
+  }
 }
