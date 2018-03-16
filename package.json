@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": "Shridhar Deshmukh",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-sass": "^3.1.0"
   }
