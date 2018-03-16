@@ -1,0 +1,138 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplemde/1.11.2/simplemde.min.js"></script>
+<template id="wc-simplemde-template">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/simplemde/1.11.2/simplemde.min.css">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+	<style>
+		.editor-toolbar {
+			border-top: none;
+			border-left: none;
+			border-right: none;
+			border-bottom: 1px solid #D3DAE2;
+			border-radius: 0;
+			font-size: 14px;
+		}
+
+		.CodeMirror {
+			border: none;
+			border-radius: 0;
+			font-size: 14px;
+		}
+
+		.editor-preview-side {
+			top: calc(var(--mainViewMenuHeight) * 1px + 50px);
+			height: calc(100vh - var(--mainViewMenuHeight) * 1px + 50px);
+			border-top: none;
+			border-bottom: none;
+			border-right: none;
+			border-left: 1px solid #D3DAE2;
+			border-radius: 0;
+		}
+
+		.editor-toolbar.fullscreen {
+			top: calc(var(--mainViewMenuHeight) * 1px);
+		}
+
+		.CodeMirror-fullscreen {
+			top: calc(var(--mainViewMenuHeight) * 1px + 50px);
+			height: calc(100vh - var(--mainViewMenuHeight) * 1px + 50px);
+		}
+	</style>
+
+	<div class="wc-simplemde-container">
+		<textarea class="simplemde-text"></textarea>
+	</div>
+</template>
+<script>
+	const doc = (document._currentScript || document.currentScript).ownerDocument;
+	class WCSimpleMDE extends HTMLElement {
+		static get observedAttributes() {return ['value']; }
+		constructor() {
+			super();
+
+			this.createTemplate();
+			this.mde = null;
+		}
+
+		get value() {
+			return this.getAttribute("value")
+		}
+
+		set value(newValue) {
+			this.setAttribute("value", newValue);
+		}
+
+		createTemplate() {
+			const template = doc.querySelector('#wc-simplemde-template');
+			this.attachShadow({mode: 'open'});
+			this.shadowRoot.appendChild(template.content.cloneNode(true));
+		}
+
+		addQuote(text) {
+			if (!this.mde) {
+				return;
+			}
+			let cm = this.mde.codemirror;
+			// 1. Clear the selection and append two newlines (if needed)
+			let pos = cm.getCursor();
+			cm.setCursor(pos);
+			if (pos.line > 0 || pos.ch > 0) {
+				cm.replaceSelection((pos.ch > 0) ? "\n\n" : "\n");
+			}
+			// 2. Append text and select it
+			cm.replaceSelection(text, "around");
+			// 4. Append two newlines (if needed) and move cursor
+			pos = cm.getCursor();
+			cm.setCursor(pos);
+			cm.replaceSelection((pos.ch > 0) ? "\n\n" : "\n", "around");
+			pos = cm.getCursor();
+			cm.setCursor(pos);
+			// 5. Focus the editor
+
+			// Kinda dirty trick to focus element without immediate scrolling
+			let left = document.body.scrollLeft, top = document.body.scrollTop;
+			cm.focus();
+			window.scrollTo(left, top);
+
+			let cbr = this.getBoundingClientRect();
+			window.scrollBy({
+				top: cbr.y - 100,
+				left: 0,
+				behavior: 'smooth'
+			});
+		}
+
+
+		connectedCallback() {
+			const text = this.shadowRoot.querySelector(".simplemde-text");
+
+			this.mde = new SimpleMDE({
+				element: text,
+				status: false,
+				initialValue: this.value,
+				spellChecker: false,
+				autofocus: false,
+				tabSize: 4
+			});
+
+			this.mde.codemirror.on("change", () => {
+				this.changingValue = true;
+				this.value = this.mde.value();
+				this.dispatchEvent(new CustomEvent("change"));
+				this.changingValue = false;
+			})
+		}
+
+		disconnectedCallback() {
+			this.mde = null;
+		}
+
+		attributeChangedCallback(name, oldValue, newValue) {
+			if (name ==="value" && this.mde && !this.changingValue) {
+				this.mde.value(newValue);
+			}
+
+		}
+	}
+	customElements.define('wc-simplemde', WCSimpleMDE);
+
+</script>

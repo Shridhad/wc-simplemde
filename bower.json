@@ -1,0 +1,17 @@
+{
+  "name": "wc-simplemde",
+  "description": "Web Component wrapper over simple mde",
+  "authors": [
+    "Shridhar Deshmukh"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "simplemde": "^1.11.2",
+    "codemirror": "^5.35.0"
+  }
+}

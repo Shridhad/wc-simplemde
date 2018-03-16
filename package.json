@@ -1,0 +1,8 @@
+{
+  "name": "wc-simplemde",
+  "version": "0.1.0",
+  "description": "Web Component wrapper over simple mde ",
+  "main": "index.js",
+  "author": "Shridhar Deshmukh",
+  "license": "MIT"
+}
