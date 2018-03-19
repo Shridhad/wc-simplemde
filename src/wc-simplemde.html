@@ -1,4 +1,5 @@
 <script src="./simplemde.min.js"></script>
+<script src="../bower_components/marked/marked.min.js"></script>
 <template id="wc-simplemde-template">
     <link rel="stylesheet" type="text/css" href="./css/wc-simplemde.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
@@ -105,13 +106,20 @@
 		connectedCallback() {
 			const text = this.shadowRoot.querySelector(".simplemde-text");
 
+			marked.setOptions({
+				sanitize: true
+			});
+
 			this.mde = new SimpleMDE({
 				element: text,
 				status: false,
 				initialValue: this.value,
 				spellChecker: false,
 				autofocus: false,
-				tabSize: 4
+				tabSize: 4,
+				previewRender: function (plainText) {
+					return marked(plainText); // Returns HTML from a custom parser
+				},
 			});
 
 			this.mde.codemirror.on("change", () => {

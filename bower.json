@@ -15,6 +15,7 @@
     "simplemde": "^1.11.2",
     "codemirror": "^5.35.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.1.0",
-    "wc-simplemde": "https://github.com/Shridhad/wc-simplemde.git"
+    "wc-simplemde": "https://github.com/Shridhad/wc-simplemde.git",
+    "marked": "^0.3.17"
   }
 }
