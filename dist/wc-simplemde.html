@@ -134,7 +134,16 @@
 				autofocus: false,
 				tabSize: 4,
 				toolbar: ["bold", "italic", "heading", "|", "code", "unordered-list", "ordered-list", "|",
-						"link", "image", "|", "preview", "side-by-side", "fullscreen", "|", "guide"],
+						"link", "image", "|", "preview", "side-by-side", "fullscreen", "|",
+					{
+						name: "guide",
+						action: function openGuide(){
+						    window.open('https://vaadin.com/markdown-guide','_blank');
+						},
+						className: "fa fa-question-circle",
+						title: "Markdown Guide",
+					}
+				],
 				previewRender: function (plainText) {
 					return marked(plainText); // Returns HTML from a custom parser
 				},

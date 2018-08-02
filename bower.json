@@ -1,6 +1,6 @@
 {
   "name": "wc-simplemde",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Web Component wrapper over simple mde",
   "authors": [
     "Shridhar Deshmukh"
