@@ -149,7 +149,13 @@
 		}
 
 		disconnectedCallback() {
-			this.mde = null;
+            this.mde = null;
+
+		    // Remove SimpleMDE and codemirror elements
+            const text = this.shadowRoot.querySelector(".simplemde-text");
+            while (text.nextSibling) {
+                text.parentNode.removeChild(text.nextSibling);
+            }
 		}
 
 		attributeChangedCallback(name, oldValue, newValue) {
