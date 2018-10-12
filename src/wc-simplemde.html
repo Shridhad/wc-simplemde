@@ -97,7 +97,7 @@
 			// 5. Focus the editor
 
 			// Kinda dirty trick to focus element without immediate scrolling
-			let left = document.body.scrollLeft, top = document.body.scrollTop;
+			let left = this.getBodyScrollLeft(), top = this.getBodyScrollTop();
 			cm.focus();
 			window.scrollTo(left, top);
 
@@ -109,6 +109,15 @@
 			});
 		}
 
+		getBodyScrollTop() {
+			const el = document.scrollingElement || document.documentElement;
+			return el.scrollTop;
+		}
+
+		getBodyScrollLeft() {
+			const el = document.scrollingElement || document.documentElement;
+			return el.scrollLeft;
+		}
 
 		connectedCallback() {
 			const text = this.shadowRoot.querySelector(".simplemde-text");
