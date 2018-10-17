@@ -80,24 +80,26 @@
 				return;
 			}
 			let cm = this.mde.codemirror;
-			// 1. Clear the selection and append two newlines (if needed)
-			let pos = cm.getCursor();
-			cm.setCursor(pos);
-			if (pos.line > 0 || pos.ch > 0) {
-				cm.replaceSelection((pos.ch > 0) ? "\n\n" : "\n");
+			if ( text !== '' ) {
+				// 1. Clear the selection and append two newlines (if needed)
+				let pos = cm.getCursor();
+				cm.setCursor(pos);
+				if (pos.line > 0 || pos.ch > 0) {
+					cm.replaceSelection((pos.ch > 0) ? "\n\n" : "\n");
+				}
+				// 2. Append text and select it
+				cm.replaceSelection(text, "around");
+				// 4. Append two newlines (if needed) and move cursor
+				pos = cm.getCursor();
+				cm.setCursor(pos);
+				cm.replaceSelection((pos.ch > 0) ? "\n\n" : "\n", "around");
+				pos = cm.getCursor();
+				cm.setCursor(pos);
 			}
-			// 2. Append text and select it
-			cm.replaceSelection(text, "around");
-			// 4. Append two newlines (if needed) and move cursor
-			pos = cm.getCursor();
-			cm.setCursor(pos);
-			cm.replaceSelection((pos.ch > 0) ? "\n\n" : "\n", "around");
-			pos = cm.getCursor();
-			cm.setCursor(pos);
 			// 5. Focus the editor
 
 			// Kinda dirty trick to focus element without immediate scrolling
-			let left = document.body.scrollLeft, top = document.body.scrollTop;
+			let left = this.getBodyScrollLeft(), top = this.getBodyScrollTop();
 			cm.focus();
 			window.scrollTo(left, top);
 
@@ -109,6 +111,15 @@
 			});
 		}
 
+		getBodyScrollTop() {
+			const el = document.scrollingElement || document.documentElement;
+			return el.scrollTop;
+		}
+
+		getBodyScrollLeft() {
+			const el = document.scrollingElement || document.documentElement;
+			return el.scrollLeft;
+		}
 
 		connectedCallback() {
 			const text = this.shadowRoot.querySelector(".simplemde-text");
@@ -149,7 +160,13 @@
 		}
 
 		disconnectedCallback() {
-			this.mde = null;
+            this.mde = null;
+
+		    // Remove SimpleMDE and codemirror elements
+            const text = this.shadowRoot.querySelector(".simplemde-text");
+            while (text.nextSibling) {
+                text.parentNode.removeChild(text.nextSibling);
+            }
 		}
 
 		attributeChangedCallback(name, oldValue, newValue) {
