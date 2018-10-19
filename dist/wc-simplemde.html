@@ -88,6 +88,8 @@
 			if (!this.mde) {
 				return;
 			}
+			let left = this.getBodyScrollLeft(), top = this.getBodyScrollTop();
+
 			let cm = this.mde.codemirror;
 			if ( text !== '' ) {
 				// 1. Clear the selection and append two newlines (if needed)
@@ -108,16 +110,8 @@
 			// 5. Focus the editor
 
 			// Kinda dirty trick to focus element without immediate scrolling
-			let left = this.getBodyScrollLeft(), top = this.getBodyScrollTop();
 			cm.focus();
 			window.scrollTo(left, top);
-
-			let cbr = this.getBoundingClientRect();
-			window.scrollBy({
-				top: cbr.y - 100,
-				left: 0,
-				behavior: 'smooth'
-			});
 		}
 
 		getBodyScrollTop() {
